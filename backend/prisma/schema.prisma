@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model breeds {
+  id   Int     @id @default(autoincrement())
+  name String?
+  cats cats[]
+}
+
+model cats {
+  id        Int     @id(map: "cat_pkey") @default(autoincrement())
+  name      String?
+  breed_id  Int?
+  age       Int?
+  sex_id    Int?
+  fur_color String?
+  breeds    breeds? @relation(fields: [breed_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "breed_fk")
+  sexes     sexes?  @relation(fields: [sex_id], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "sex_fk")
+}
+
+model fur_colors {
+  id   Int     @id @default(autoincrement())
+  name String?
+}
+
+model sexes {
+  id   Int     @id @default(autoincrement())
+  name String?
+  cats cats[]
+}
